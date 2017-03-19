@@ -34,7 +34,7 @@ let parseFiles = (url,res) => {
 	let type = getType(fileName.slice(fileName.lastIndexOf('.') + 1));
 
 	fs.readFile('./src/' + fileName, (err, data) => {
-		console.log('./src/' + fileName,'type:' ,type);
+		console.log('./src/' + fileName,'type:' ,type, ', nowTime: ', new Date());
 		if(err){
 			res.writeHead(404, { 'Content-Type':'text/plain; charset="UTF-8"' });
 			// res.write(err.message);

@@ -93,6 +93,28 @@ let config = {
 };
 
 
+// 可配置属性
+let attribute = {
+	position: true
+	, scale: true
+	, rotation: true
+	, name: true
+	, visible: true
+	, castShader: false
+	, receiveShader: false 
+	, geometry: {
+
+	}
+	, material: {
+		color: true
+		, transparent: true
+		, opacity: true
+		, wireframe: true
+		, map: false
+	}
+};
+
+
 let attr = {name:'innerHTML', op1:'geometry', op2:'material',option:'option'};
 let scene
 	, camera
@@ -141,7 +163,7 @@ let hover = () => {
 		let edges = generateMaterial('basic',{color: 0xfff000, side: THREE.BackSide});
 
 		hoverEdge = new THREE.Mesh(geometry, edges);
-		// hoverEdge.position = intersects[ 0 ].object.position;
+		hoverEdge.position = intersects[ 0 ].object.position;
 		hoverEdge.scale.multiplyScalar(1.05);
 		scene.add(hoverEdge);	
 	}
@@ -178,14 +200,42 @@ let addShape = (event) => {
 	render();
 }
 
-let render = () => {
-	rayCaster.setFromCamera(mouse, camera);
-	renderer.render(scene,camera);
+
+let addAttr = (target) => {
+	let geo = null
+		, mat = null
+		, mesh = null
+		;
+
+	geo = createNode('div');
+	mat = createNode('div');
 }
 
-let animate = () => {
-	requestAnimationFrame(animate);
-	render();
+let showAttr = (target) => {
+	return (attr) => {
+
+	}
+}
+
+let loopInObject = (obj, fn, level) => {
+	Object.keys(obj).forEach((item,index) => {
+		if(typeof obj[item] !== 'boolean'){
+			loopInObject(obj[item], fn, level + 1);
+			return;
+		}
+
+		if(!obj[item]){
+			return;
+		}
+
+		fn(item);
+	});
+}
+
+
+let onMouseMove = (e) => {
+	mouse.x = (e.layerX / showAreaRect.width) * 2 - 1;
+	mouse.y = (e.layerY / showAreaRect.height) * 2 - 1;
 }
 
 let init = () => {
@@ -214,6 +264,16 @@ let init = () => {
 
 }
 
+let render = () => {
+	rayCaster.setFromCamera(mouse, camera);
+	renderer.render(scene,camera);
+}
+
+let animate = () => {
+	requestAnimationFrame(animate);
+	render();
+}
+
 let main = () => {
 	let node = createNode('div')
 	addEvent(node,'click',addShape);
@@ -232,10 +292,7 @@ let main = () => {
 	init();
 }
 
-let onMouseMove = (e) => {
-	mouse.x = (e.layerX / showAreaRect.width) * 2 - 1;
-	mouse.y = (e.layerY / showAreaRect.height) * 2 - 1;
-}
+
 
 
 
