@@ -39,12 +39,12 @@ let parseFiles = (url,res) => {
 		console.log('./src/' + fileName);
 		if(err){
 			res.writeHead(404, { 'Content-Type':'text/plain; charset="UTF-8"' });
-			res.write(err.message);
-			res.end();
+			// res.write(err.message);
+			res.end(err.message);
 		} else {
 			res.writeHead(200, { 'Content-Type': type });
-			res.write(data);
-			res.end();
+			// res.write(data);
+			res.end(data);
 		}
 	})
 }
