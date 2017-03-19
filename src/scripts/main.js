@@ -136,12 +136,22 @@ let hover = () => {
 	scene.remove(hoverEdge);
 	hoverEdge = null;
 	let intersects = rayCaster.intersectObjects( scene.children );
-	for(let i = 0; i < intersects.length; i++){
-		let geometry = intersects[ i ].object.geometry;
-		let edges = new THREE.EdgesGeometry(geometry)
-		hoverEdge = new THREE.LineSegments(edges, new THREE.LineBasicMaterial({color: 0x00fff0}));
-		scene.add(hoverEdge);
+	if(intersects.length){
+		let geometry = intersects[ 0 ].object.geometry;
+		let edges = generateMaterial('basic',{color: 0xfff000, side: THREE.BackSide});
+
+		hoverEdge = new THREE.Mesh(geometry, edges);
+		// hoverEdge.position = intersects[ 0 ].object.position;
+		hoverEdge.scale.multiplyScalar(1.05);
+		scene.add(hoverEdge);	
 	}
+	render();
+	// for(let i = 0; i < intersects.length; i++){
+	// 	let geometry = intersects[ i ].object.geometry;
+	// 	let edges = new THREE.EdgesGeometry(geometry)
+	// 	hoverEdge = new THREE.LineSegments(edges, new THREE.LineBasicMaterial({color: 0x00fff0}));
+	// 	scene.add(hoverEdge);
+	// }
 
 }
 
@@ -181,7 +191,7 @@ let animate = () => {
 let init = () => {
 	scene = new THREE.Scene();
 	camera = new THREE.PerspectiveCamera(75, showAreaRect.width/showAreaRect.height, 0.1, 1000);
-	camera.position.x = 100;
+	camera.position.x = 50;
 	renderer = new THREE.WebGLRenderer();
 	console.info(showAreaRect);
 	renderer.setSize(showAreaRect.width, showAreaRect.height);
@@ -224,7 +234,7 @@ let main = () => {
 
 let onMouseMove = (e) => {
 	mouse.x = (e.layerX / showAreaRect.width) * 2 - 1;
-	mouse.y = (e.layerX / showAreaRect.height) * 2 - 1;
+	mouse.y = (e.layerY / showAreaRect.height) * 2 - 1;
 }
 
 
