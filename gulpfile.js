@@ -6,8 +6,9 @@ let fs = require('fs');
 let url = require('url');
 
 let config = {
+	//server: '139.129.235.177'
 	server: '127.0.0.1'
-	, port: 8081
+	, port: 8888
 }
 
 let count = 1;
@@ -35,6 +36,7 @@ let parseFiles = (url,res) => {
 	let type = getType(fileName.lastIndexOf('.') + 1);
 
 	fs.readFile('./src/' + fileName, (err, data) => {
+		console.log('./src/' + fileName);
 		if(err){
 			res.writeHead(404, { 'Content-Type':'text/plain; charset="UTF-8"' });
 			res.write(err.message);
