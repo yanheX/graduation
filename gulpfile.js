@@ -15,7 +15,7 @@ let count = 1;
 
 let server = new http.Server();
 
-server.on('request',(req, res) => {
+server.on('GET',(req, res) => {
 	console.log(count++);
 	let pathName = url.parse(req.url).pathname || 'index.html';
 	console.log(pathName);
@@ -36,7 +36,7 @@ let parseFiles = (url,res) => {
 	let type = getType(fileName.lastIndexOf('.') + 1);
 
 	fs.readFile('./src/' + fileName, (err, data) => {
-		console.log('./src/' + fileName);
+		console.log('./src/' + fileName,'type:' ,type);
 		if(err){
 			res.writeHead(404, { 'Content-Type':'text/plain; charset="UTF-8"' });
 			// res.write(err.message);
