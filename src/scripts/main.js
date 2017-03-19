@@ -1,3 +1,4 @@
+'use strict'
 let doc = document.body;
 let geoContainer = [], matContainer = [], meshContainer = [];
 let config = {

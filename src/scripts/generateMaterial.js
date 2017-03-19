@@ -1,3 +1,4 @@
+'use strict'
 let generateMaterial = (type, options) => {
 	var material = null;
 	switch (type.toLowerCase()) {

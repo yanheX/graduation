@@ -1,3 +1,4 @@
+'use strict'
 let generateShape = (type = 'cube',option = [10,10,10]) =>{
 
 	var shape = null;
