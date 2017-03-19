@@ -7,12 +7,14 @@ let url = require('url');
 
 let config = {
 	server: '127.0.0.1'
-	, proxy: '8081'
+	, port: '8081'
 }
 
 let count = 1;
 
-let server = http.createServer((req, res) => {
+let server = new http.Server();
+
+server.on('request',(req, res) => {
 	console.log(count++);
 	let pathName = url.parse(req.url).pathname || 'index.html';
 	console.log(pathName);
@@ -73,8 +75,6 @@ let getType = (endTag) => {
 
 
 gulp.task('default', function(){
-	server.listen(config.proxy,config.server,()=>{
-		console.log('start');
-	});
+	server.listen(config.port);
 });
 
