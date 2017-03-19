@@ -49,6 +49,7 @@ let parseFiles = (url,res) => {
 
 let getType = (endTag) => {
 	var type = null;
+	console.log(endTag);
 	switch (endTag) {
 		case 'html':
 		case 'htm':
