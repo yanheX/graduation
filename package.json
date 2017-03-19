@@ -1,0 +1,11 @@
+{
+  "name": "Model",
+  "version": "1.0.0",
+  "description": "my graduate",
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "http": "latest",
+    "fs": "latest",
+    "url": "latest"
+  }
+}
