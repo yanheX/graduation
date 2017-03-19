@@ -1,3 +1,5 @@
+'use strict'
+
 let gulp = require('gulp');
 let http = require('http');
 let fs = require('fs');
