@@ -23,7 +23,7 @@ let server = http.createServer((req, res) => {
 			parseFiles('/index.html', res);
 			break;
 		default: 
-			parseFiles(pathName);
+			parseFiles(pathName, res);
 			break;
 	}
 
