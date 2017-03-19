@@ -7,7 +7,7 @@ let url = require('url');
 
 let config = {
 	server: '127.0.0.1'
-	, port: '8081'
+	, port: 8081
 }
 
 let count = 1;
