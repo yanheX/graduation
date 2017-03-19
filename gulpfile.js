@@ -13,9 +13,7 @@ let config = {
 
 let count = 1;
 
-let server = new http.Server();
-
-server.on('GET',(req, res) => {
+let server = http.createServer((req, res) => {
 	console.log(count++);
 	let pathName = url.parse(req.url).pathname || 'index.html';
 	console.log(pathName);
