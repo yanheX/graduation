@@ -31,7 +31,7 @@ let server = http.createServer((req, res) => {
 
 let parseFiles = (url,res) => {
 	let fileName = url.slice(1);
-	let type = getType(fileName.lastIndexOf('.') + 1);
+	let type = getType(fileName.slice(fileName.lastIndexOf('.') + 1));
 
 	fs.readFile('./src/' + fileName, (err, data) => {
 		console.log('./src/' + fileName,'type:' ,type);
@@ -49,7 +49,6 @@ let parseFiles = (url,res) => {
 
 let getType = (endTag) => {
 	var type = null;
-	console.log(endTag);
 	switch (endTag) {
 		case 'html':
 		case 'htm':

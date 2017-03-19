@@ -98,7 +98,7 @@ let scene
 	, camera
 	, renderer
 	, rayCaster
-	, control
+	, controls
 	, hoverEdge = null
 	, mouse = new THREE.Vector2()
 	, toolbar = document.querySelector('#toolbar')
