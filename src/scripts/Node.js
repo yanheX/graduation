@@ -13,6 +13,7 @@ class Node{
 			, material: {
 				color: null
 				, opacity: 1
+				, transparent: true
 				, wireframe: true
 				, side: THREE.DoubleSide
 				, emssive: null
@@ -22,7 +23,17 @@ class Node{
 			}
 		};
 
-		kit.optionSet(this.style, op.style);
+		kit.optionSet(this, op);
+		let groupList = ['group', 'scene'];
+		if(groupList.indexOf(this.type) > -1){
+			this.geo = null;
+			this.mat = null;
+			this.option = kit.generateShape(this.type);
+		} else {
+			this.geo = kit.generateShape(this.type, this.geo);
+			this.mat = kit.generateMaterial('standard', this.style.material);
+			this.option = THREE.Mesh(this.geo, this.mat);
+		}
 
 
 
@@ -33,20 +44,46 @@ class Node{
 		return node;
 	}
 
-	insertNode(){
+	insertNode(node, type){
+		type = type == 1 ? 'prepend' : 'append';
+		if(kit.typeOf(node) == 'array'){
+			let self = this;
+			kit.each(node, (node) => {
+				self.insertNode(node);
+			})
+		} else {
+			if( typeof node.updateStyle == 'undefined'){
+				node = new Node(node);
+			}
+			return this[type](node);
+		}
 
 	}
 
-	appendNode(node){
-
+	append(node){
+		if(typeof node.updateStyle == 'undefined'){
+			return this.insertNode(node);
+		}
+		node.parent = this;
+		this.childs.push(node);
+		this.option.add(node.option);
+		return node;
 	}
 
 	prepend(node){
+		if(typeof node.updateStyle == 'undefined'){
+			return this.insertNode(node, 1);
+		}
 
+		node.parent =this;
+		this.childs.unshift(node);
+		this.option.add(node.option);
+		return node;
 	}
 
 	empty(){
 		this.childs = [];
+
 		return this;
 	}
 
@@ -56,11 +93,13 @@ class Node{
 	}
 
 	show(){
-
+		this.style.visible = this.option.visible = true;
+		return this;
 	}
 
 	hide(){
-
+		this.style.visible = this.option.visible = false;
+		return this;
 	}
 
 	find(selector){
@@ -86,8 +125,9 @@ class Node{
 		return wrap;
 	}
 
-	updateStyle(){
-
+	updateStyle(flag){
+		let self = this;
+		kit.optionSet(self.option, self.style, flag);
 	}
 
 	each(fn, justChild){

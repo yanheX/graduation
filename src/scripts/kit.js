@@ -35,6 +35,75 @@ kit.each = (o, fn, type) => {
 	}
 };
 
+kit.generateShape = (type = 'cube',option = [10,10,10]) =>{
+
+	var shape = null;
+
+	switch (type.toLowerCase()) {
+		case 'cube':
+			shape = new THREE.BoxGeometry(...option);
+			break;
+		case 'circle':
+			shape = new THREE.CircleGeometry(...option);
+			break;
+		case 'cone':
+			shape = new THREE.ConeGeometry(...option);
+			break; // 棱锥
+		case 'cylinder':
+			shape = new THREE.CylinderGeometry(...option);
+			break; //柱体
+		case 'sphere':
+			shape = new THREE.SphereGeometry(...option);
+			break;
+		case 'ring':
+			shape = new THREE.RingGeometry(...option);
+			break;
+		case 'torus':
+			shape = new THREE.TorusGeometry(...option);
+			break;
+		case 'torusknot':
+			shape = new THREE.TorusKnotGeometry(...option);
+			break;
+		case 'group': 
+			shape = new THREE.Group();
+			break;
+		case 'scene': 
+			shape = new THREE.Scene();
+			break;
+	}
+
+	return shape;
+}
+
+kit.generateMaterial = (type = 'standard', options) => {
+	var material = null;
+	switch (type.toLowerCase()) {
+		case '':
+		case 'basic':
+			material = new THREE.MeshBasicMaterial(options);
+			break;
+		case 'phong':
+			material = new THREE.MeshPhongMaterial(options);
+			break;
+		case 'Lambert':
+			material = new THREE.MeshLambertMaterial(options);
+			break;
+		case 'normal':
+			material = new THREE.MeshNormalMaterial();
+			break;
+		case 'line':
+			material = new THREE.LineBasicMaterial(options);
+			break;
+		case 'standard':
+			material = new THREE.MeshStandardMaterial(options);
+			break;
+		default:
+			break;
+	}
+
+	return material;
+}
+
 
 
 let addNode = (target,node) => {
