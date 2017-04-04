@@ -3,7 +3,7 @@ for my last classwork
 
 
 # 进度控制
-  完成度：5%
+  完成度：30%
   
 # 完成功能
 
@@ -11,35 +11,23 @@ for my last classwork
 
 2、hover状态附加（可获取到鼠标所在位置的图形属性，可以为修改属性做准备）
 
-3、双向绑定controller
+3、状态节点Node(Node.js)
 
----------- controller -----------
-|				|				|
-|				|				|
-|				|				|
-threeJS      Object          input
+4、绘图类draw(draw.js)
+
+5、属性相关dom类 (toolBar.js)
+
+6、状态节点转换为6所需要数据的类(nodeBindDom.js) -> 完成度 30%
+
+	节点添加过程：
+	Node ----> Node(ThreeJS) ----> draw
+	产生可修改选中物体属性的输入框：
+	Node(ThreeJS) -----> Node2Dom(initEvent) ----> toolBar(addEvent) ---->将toolBar实例化的对象添加到页面中
+	动画产生过程（未开始）：
+	Node(ThreeJS) && TimeLine(record Node's state , nextStep)
 
 # 预览网站
 
 http://139.129.235.177:8888/
 
-#controller详解
 
-						timeLine
-							|
-							|
-							|
-						controller
-							|
-	------------------------ ------------------------
-	|						|						|
-	|						|						|
-	|						|						|
-THREEJS对象				Container				  dom对象
-
-container对象
-{
-	name: ''
-	, type: '' //group||shape||scene
-	, 'position/x': 
-}
