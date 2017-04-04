@@ -18,6 +18,9 @@ let generateMaterial = (type, options) => {
 		case 'line':
 			material = new THREE.LineBasicMaterial(options);
 			break;
+		case 'standard':
+			material = new THREE.MeshStandardMaterial(options);
+			break;
 		default:
 			break;
 	}

@@ -1,121 +1,7 @@
 'use strict'
 let doc = document.body;
 let geoContainer = [], matContainer = [], meshContainer = [];
-let config = {
-		"cube":{
-			geometry: {
-				option:	[1,1,1]
-			}
-			, material: {
-				color: 0xffffff
-				, side: THREE.DoubleSide
-				, wireframe: true
-			}
 
-		}
-		, "sphere": {
-			geometry: {
-				option:	[5,32,32]
-			}
-			, material: {
-				color: 0xffffff
-				, side: THREE.DoubleSide
-				, wireframe: true
-			}
-
-		}
-		, "circle": {
-			geometry: {
-				option:	[5,32]
-			}
-			, material: {
-				color: 0xffffff
-				, side: THREE.DoubleSide
-				, wireframe: true
-			}
-
-		}
-		, "cone": {
-			geometry: {
-				option:	[5,20,32]
-			}
-			, material: {
-				color: 0xffffff
-				, side: THREE.DoubleSide
-				, wireframe: true
-			}
-
-		}
-		, "cylinder": {
-			geometry: {
-				option:	[5, 5, 20, 32]
-			}
-			, material: {
-				color: 0xffffff
-				, side: THREE.DoubleSide
-				, wireframe: true
-			}
-
-		}
-		, "ring": {
-			geometry: {
-				option:	[3,5,32]
-			}
-			, material: {
-				color: 0xffffff
-				, side: THREE.DoubleSide
-				, wireframe: true
-			}
-
-		}
-		, "torus": {
-			geometry: {
-				option:	[10,3,16,100]
-			}
-			, material: {
-				color: 0xffffff
-				, side: THREE.DoubleSide
-				, wireframe: true
-			}
-
-		}
-		, "torusKnot": {
-			geometry: {
-				option:	[10,3,100,16]
-			}
-			, material: {
-				color: 0xffffff
-				, side: THREE.DoubleSide
-				, wireframe: true
-			}
-
-		}
-};
-
-
-// 可配置属性
-let attribute = {
-	position: true
-	, scale: true
-	, rotation: true
-	, name: true
-	, visible: true
-	, castShader: false
-	, receiveShader: false 
-	, geometry: {
-
-	}
-	, material: {
-		color: true
-		, transparent: true
-		, opacity: true
-		, wireframe: true
-		, map: false
-	}
-};
-
-
-let attr = {name:'innerHTML', op1:'geometry', op2:'material',option:'option'};
 let scene
 	, camera
 	, renderer
@@ -132,27 +18,6 @@ let scene
 	;
 
 
-let addNode = (target,node) => {
-	target.appendChild(node);
-}
-
-let createNode = (name) => {
-	return document.createElement(name);
-}
-
-let addClass = (node,CN) => {
-	node.classList.add(CN);
-}
-
-let removeClass = (node,CN) => {
-	node.classList.remove(CN);
-}
-
-let addEvent = (node, type, fn) => {
-	node.addEventListener(type,(e) => {
-		fn(e)
-	});
-}
 
 let hover = () => {
 	scene.remove(hoverEdge);
@@ -163,7 +28,9 @@ let hover = () => {
 		let edges = generateMaterial('basic',{color: 0xfff000, side: THREE.BackSide});
 
 		hoverEdge = new THREE.Mesh(geometry, edges);
-		hoverEdge.position = intersects[ 0 ].object.position;
+		["x", "y", "z"].forEach((item) => {
+			hoverEdge.position[item] = intersects[ 0 ].object.position[item];
+		})
 		hoverEdge.scale.multiplyScalar(1.05);
 		scene.add(hoverEdge);	
 	}
@@ -190,7 +57,7 @@ let addShape = (event) => {
 	let geo = generateShape(type, op1);
 	geoContainer.push(geo);
 
-	let mat = generateMaterial('', op2);
+	let mat = generateMaterial('standard', op2);
 	matContainer.push(mat);
 
 	let mesh = new THREE.Mesh(geo, mat);
@@ -209,18 +76,47 @@ let addAttr = (target) => {
 
 	geo = createNode('div');
 	mat = createNode('div');
+
+	if(target){
+		loopInObject(target, showAttr(target),  0);
+	}
+	addNode(operateArea, geo);
+	addNode(operateArea, mat);
 }
 
-let showAttr = (target) => {
-	return (attr) => {
-
+let showAttr = (target, origin) => {
+	return (attr,target, origin) => {
+		let attribute = target[attr];
+		if(typeof attribute !== 'boolean'){
+			return (attr) => {
+				let attribute
+			}
+		}
+		let node = null;
+		switch(attribute){
+			case 'number': 
+				node = showNumberAttr(target, attr);
+			// case 
+		}
+		return node;
 	}
+}
+
+let showNumberAttr = (target, attr) => {
+	let container = createNode('div')
+		// , label = 
+
+	return container;
+}
+
+let linkAttr = (origin, target) => {
+
 }
 
 let loopInObject = (obj, fn, level) => {
 	Object.keys(obj).forEach((item,index) => {
 		if(typeof obj[item] !== 'boolean'){
-			loopInObject(obj[item], fn, level + 1);
+			loopInObject(obj[item], fn(obj[item]), level + 1);
 			return;
 		}
 
@@ -243,7 +139,6 @@ let init = () => {
 	camera = new THREE.PerspectiveCamera(75, showAreaRect.width/showAreaRect.height, 0.1, 1000);
 	camera.position.x = 50;
 	renderer = new THREE.WebGLRenderer();
-	console.info(showAreaRect);
 	renderer.setSize(showAreaRect.width, showAreaRect.height);
 	controls = new THREE.OrbitControls(camera, renderer.domElement);
 	rayCaster = new THREE.Raycaster();
@@ -256,6 +151,7 @@ let init = () => {
 	addEvent(controls,'change',()=>{
 		renderer.render(scene,camera);
 	});
+
 	addEvent(showArea, 'mousemove', (e)=>{
 		onMouseMove(e);
 		hover();
@@ -289,6 +185,7 @@ let main = () => {
 		addNode(node, shape);
 	})
 	addNode(toolbar, node);
+	addAttr();
 	init();
 }
 
@@ -297,3 +194,4 @@ let main = () => {
 
 
 main();
+
