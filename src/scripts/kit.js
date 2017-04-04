@@ -1,12 +1,13 @@
 let kit = {};
 
 kit.optionSet = (o1, o2, isSample) => {
+	let self = this;
 	for(let k in o2){
 		if(!o2[k] || ['number', 'string', 'boolean'].indexOf(typeof o2[k]) > -1){
 			o1[k] = o2[k];
 		} else if(!isSample){
 			o1[k] = o1[k] || {};
-			this.optionSet(o1[k], o2[k]);
+			self.optionSet(o1[k], o2[k]);
 		}
 	}
 
@@ -102,6 +103,28 @@ kit.generateMaterial = (type = 'standard', options) => {
 	}
 
 	return material;
+}
+
+kit.createNode = (name) => {
+	return document.createElement(name);
+};
+
+kit.addNode = (target,node) => {
+	target.appendChild(node);
+}
+
+kit.addClass = (node,CN) => {
+	node.classList.add(...CN);
+}
+
+kit.removeClass = (node,CN) => {
+	node.classList.remove(...CN);
+}
+
+kit.addEvent = (node, type, fn) => {
+	node.addEventListener(type,(e) => {
+		fn(e)
+	});
 }
 
 

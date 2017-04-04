@@ -1,5 +1,5 @@
 class Node{
-	constrcutor(op){
+	constructor(op){
 		this.opt = op || {};
 		let self = this;
 		this.childs = [];
@@ -7,9 +7,9 @@ class Node{
 			visible: true
 			, castShader: false
 			, receiveShader: false
-			, position: [0, 0, 0]
-			, scale: [1, 1, 1]
-			, rotation: [0, 0, 0]
+			, position: {x:1, y:1, z:1}
+			, scale: {x:1, y:1, z:1}
+			, rotation: {x:1, y:1, z:1}
 			, material: {
 				color: null
 				, opacity: 1
@@ -34,9 +34,7 @@ class Node{
 			this.mat = kit.generateMaterial('standard', this.style.material);
 			this.option = THREE.Mesh(this.geo, this.mat);
 		}
-
-
-
+		this.updateStyle(1);
 	}
 
 	create(op){

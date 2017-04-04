@@ -11,8 +11,12 @@ html,body{
 .container{
 	position: absolute;
 	height: 100%;
-	top: 0;
-	bottom: 0;
+	width: 100%;
+}
+
+#topArea{
+	height: 70%;
+	top:0;
 }
 
 #toolbar{
@@ -27,4 +31,11 @@ html,body{
 #operate{
 	width: 20%;
 	left: 80%;
+}
+
+#timeline{
+	height: 30%;
+	width: 100%;
+	left: 0;
+	bottom: 0;
 }
