@@ -17,7 +17,7 @@ for my last classwork
 
 5、属性相关dom类 (toolBar.js)
 
-6、状态节点转换为6所需要数据的类(nodeBindDom.js) -> 完成度 80%（双向事件绑定实现有误，正在调整）
+6、状态节点转换为6所需要数据的类(nodeBindDom.js) -> 完成度 90%（双向事件绑定实现太粗暴，导致各种数据类型出现问题，嗯。。。继续调整中）
 
 	节点添加过程：
 	Node ----> Node(ThreeJS) ----> draw
@@ -26,7 +26,7 @@ for my last classwork
 	动画产生过程（未开始）：
 	Node(ThreeJS) && TimeLine(record Node's state , nextStep)
 
-7、完成了从json数据到node节点再到dom节点属性的联通
+7、完成了从json数据到node节点再到dom节点属性的联通，大概就是virtual dom的实现？嗯。。。瞎猜的23333
 
 # 预览网站
 

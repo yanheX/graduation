@@ -45,9 +45,11 @@ class Node2Dom{
 							return (e) => {
 								// let value = wrap.value;
 								window.timer = setInterval(() => {
-									if(wrap.value != e.value){
-										op[i] = e.value;
-										wrap.value = e.value;
+									let tar = e.target
+									if(wrap.value != tar.value){
+										op[i] = tar.value;
+										wrap.value = tar.value;
+										console.info(1);
 									} else {
 										return;
 									}

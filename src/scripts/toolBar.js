@@ -52,6 +52,9 @@ class toolBar{
 				}
 
 			}
+			['for', 'id'].forEach((v, k) => {
+				tar[v] && (node.setAttribute(v, tar[v]));
+			})
 
 			tar.childs && kit.addNode(node, self.parseData(tar.childs));
 			kit.addNode(wrap, node);
