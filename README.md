@@ -3,7 +3,7 @@ for my last classwork
 
 
 # 进度控制
-  完成度：30%
+  完成度：40%
   
 # 完成功能
 
@@ -17,7 +17,7 @@ for my last classwork
 
 5、属性相关dom类 (toolBar.js)
 
-6、状态节点转换为6所需要数据的类(nodeBindDom.js) -> 完成度 30%
+6、状态节点转换为6所需要数据的类(nodeBindDom.js) -> 完成度 80%（双向事件绑定实现有误，正在调整）
 
 	节点添加过程：
 	Node ----> Node(ThreeJS) ----> draw
@@ -25,6 +25,8 @@ for my last classwork
 	Node(ThreeJS) -----> Node2Dom(initEvent) ----> toolBar(addEvent) ---->将toolBar实例化的对象添加到页面中
 	动画产生过程（未开始）：
 	Node(ThreeJS) && TimeLine(record Node's state , nextStep)
+
+7、完成了从json数据到node节点再到dom节点属性的联通
 
 # 预览网站
 
