@@ -25,7 +25,7 @@
 class toolBar{
 	constructor(op){
 		this.op = op || {}
-		this.parseData(op);
+		this.wrap = this.parseData(op);
 
 	}
 
@@ -36,15 +36,24 @@ class toolBar{
 		Object.keys(opt).forEach((item, index) => {
 			let tar = opt[item]
 			let node = kit.createNode(tar.type);
-			if(tar.class && tar.calss.length > 0){
+			if(tar.class && tar.class.length > 0){
 				kit.addClass(node, tar.class);
 			}
 			tar.event && Object.keys(tar.event).forEach((item) => {
-				if(!tar.event(item)) return;
+				if(!tar.event[item]) return;
 				kit.addEvent(node, item, tar.event[item]);
 			})
+			if(tar.value){
+				let esp = ['input']
+				if(tar.type.indexOf(esp) > -1){
+					node.value = tar.value;
+				} else {
+					node.innerHTML = tar.value;
+				}
 
-			self.parseData(tar.childs);
+			}
+
+			tar.childs && kit.addNode(node, self.parseData(tar.childs));
 			kit.addNode(wrap, node);
 		});
 

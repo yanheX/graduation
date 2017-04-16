@@ -12,6 +12,6 @@ class control{
 	}
 
 	_toolBarInit(){
-
+		
 	}
 }

@@ -7,7 +7,7 @@ kit.optionSet = (o1, o2, isSample) => {
 			o1[k] = o2[k];
 		} else if(!isSample){
 			o1[k] = o1[k] || {};
-			self.optionSet(o1[k], o2[k]);
+			kit.optionSet(o1[k], o2[k], isSample);
 		}
 	}
 
@@ -34,6 +34,16 @@ kit.each = (o, fn, type) => {
 			if (fn.call(o, o[i], i) === false) break;
 		}
 	}
+};
+
+kit.getRandomStr = (len = 10) => {
+	let seed = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+	let str = '';
+	for(let i = 0; i < len; i++){
+		let seedP = Math.floor(Math.random() * seed.length);
+		str += seed[seedP];
+	}
+	return str;
 };
 
 kit.generateShape = (type = 'cube',option = [10,10,10]) =>{

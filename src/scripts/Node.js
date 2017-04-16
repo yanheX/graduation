@@ -7,19 +7,19 @@ class Node{
 			visible: true
 			, castShader: false
 			, receiveShader: false
-			, position: {x:1, y:1, z:1}
+			, position: {x:0, y:0, z:0}
 			, scale: {x:1, y:1, z:1}
 			, rotation: {x:1, y:1, z:1}
 			, material: {
-				color: null
+				color: 0xffffff
 				, opacity: 1
 				, transparent: true
-				, wireframe: true
+				// , wireframe: true
 				, side: THREE.DoubleSide
-				, emssive: null
-				, map: null
-				, roughness: null
-				, metaless: null
+				// , emssive: null
+				// , map: null
+				// , roughness: null
+				// , metaless: null
 			}
 		};
 
@@ -32,7 +32,7 @@ class Node{
 		} else {
 			this.geo = kit.generateShape(this.type, this.geo);
 			this.mat = kit.generateMaterial('standard', this.style.material);
-			this.option = THREE.Mesh(this.geo, this.mat);
+			this.option = new THREE.Mesh(this.geo, this.mat);
 		}
 		this.updateStyle(1);
 	}

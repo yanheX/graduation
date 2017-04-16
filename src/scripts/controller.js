@@ -45,7 +45,7 @@ class controller{
 
 		let temp = data;
 
-		for(let i = 0;i < keysArray.length; i++){
+		for(let i = 0; i < keysArray.length; i++){
 			if(typeof temp[keysArray[i]] !== 'object'){
 				return temp[keysArray[i]];
 			}
