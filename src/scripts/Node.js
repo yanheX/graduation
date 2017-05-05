@@ -14,7 +14,7 @@ class Node{
 				color: 0xffffff
 				, opacity: 1
 				, transparent: true
-				// , wireframe: true
+				, wireframe: true
 				, side: THREE.DoubleSide
 				// , emssive: null
 				// , map: null

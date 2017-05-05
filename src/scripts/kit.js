@@ -137,6 +137,40 @@ kit.addEvent = (node, type, fn) => {
 	});
 }
 
+kit.parseData = (data) => {
+
+	// 检测是否为数字
+	let isNumber = Number(data);
+	if(!isNaN(isNumber)){
+		return isNumber;
+	}
+
+
+	// 检测是否布尔值
+	switch(data.toLowerCase()){
+		case 'true': return true; break;
+		case 'false': return false; break;
+	}
+
+
+	// #输入hex颜色转换为十进制数字
+	if(data.substr(0, 1) === '#' && (data.length === 7 || data.length === 4)){
+		if(isNaN(Number(data))){
+			console.warn('是否打算输入一个十六进制数？')
+			return data;
+		}
+		data.length === 4 && (data = data.replace(/\d/g, (e) => {return e + e;}));
+		return Number('0x' + data.substr(1,6));
+
+	}
+
+	// if(data.substr())
+
+
+
+	return data;
+}
+
 
 
 let addNode = (target,node) => {

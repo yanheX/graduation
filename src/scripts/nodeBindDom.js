@@ -46,10 +46,10 @@ class Node2Dom{
 								// let value = wrap.value;
 								window.timer = setInterval(() => {
 									let tar = e.target
-									if(wrap.value != tar.value){
-										op[i] = tar.value;
-										wrap.value = tar.value;
-										console.info(1);
+									console.info(tar)
+									if((wrap.value != tar.value )&& tar.value!== undefined){
+										op[i] = kit.parseData(tar.value);
+										wrap.value = kit.parseData(tar.value);
 									} else {
 										return;
 									}
