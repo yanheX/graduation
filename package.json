@@ -6,6 +6,7 @@
     "gulp": "^3.9.1",
     "http": "latest",
     "fs": "latest",
-    "url": "latest"
+    "url": "latest",
+    "gulp-concat": "latest"
   }
 }

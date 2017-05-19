@@ -1,5 +1,10 @@
-class Animate{
-	constructor(){
-		
+define('scripts/animate', [], function(){
+
+	class Animate{
+		constructor(){
+			
+		}
 	}
-}
+
+	return Animate;
+})
