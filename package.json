@@ -1,6 +1,6 @@
 {
-  "name": "Model",
-  "version": "1.0.0",
+  "name": "chart3d",
+  "version": "0.0.1",
   "description": "my graduate",
   "devDependencies": {
     "gulp": "^3.9.1",

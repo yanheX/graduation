@@ -1,4 +1,4 @@
-define('scripts/Node2Dom', ['kit'], function(kit){
+define('scripts/Node2Dom', ['kit', 'scripts/config'], function(kit, config){
 
 	class Node2Dom{
 		// 输入的只是单个图形节点或者组节点（暂不实现）
@@ -9,14 +9,16 @@ define('scripts/Node2Dom', ['kit'], function(kit){
 
 		_init(op){
 			let self = this;
-			self.wrap = self.formateAttr(op);
+			self.wrap = self.formateAttr(op, op);
 		}
 
-		formateAttr(op){
+		formateAttr(op, root){
 			let self = this;
 			let wrap = [];
 			kit.each(op, (item, i)=>{
-				self.isInAttr(attributes, item)
+				if(!self.isInAttr(config.styleConfig, i) ){
+					return;
+				}
 				// if(kit.typeOf(op[i]) === 'object'){
 					let dWrap = [];
 					wrap.push(dWrap);
@@ -43,21 +45,21 @@ define('scripts/Node2Dom', ['kit'], function(kit){
 						tWrap.parentRef = op;
 						tWrap.value = item
 						tWrap.event = {
-							focus: ((op,i, wrap) => {
+							focus: ((op,i, wrap, root) => {
 								return (e) => {
 									// let value = wrap.value;
 									window.timer = setInterval(() => {
 										let tar = e.target
-										console.info(tar)
 										if((wrap.value != tar.value )&& tar.value!== undefined){
 											op[i] = kit.parseData(tar.value);
 											wrap.value = kit.parseData(tar.value);
+											root.updateStyle();
 										} else {
 											return;
 										}
 									}, 0)
 								}
-							})(op,i, tWrap)
+							})(op,i, tWrap, root)
 							, blur: () => {
 								clearInterval(window.timer);
 								window.timer = null;
@@ -83,7 +85,7 @@ define('scripts/Node2Dom', ['kit'], function(kit){
 						tWrap.name = 'innerContainer';
 						tWrap.childs = [];
 
-						tWrap.childs = self.formateAttr(item);
+						tWrap.childs = self.formateAttr(item, root);
 
 						dWrap.childs = [lWrap, tWrap];
 
@@ -95,7 +97,7 @@ define('scripts/Node2Dom', ['kit'], function(kit){
 		}
 
 		isInAttr(origin, target){
-
+			return origin[target] ? true : false ;
 		}
 
 	}

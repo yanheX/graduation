@@ -1,2 +1,2 @@
-(function(){
+
 var require, define;

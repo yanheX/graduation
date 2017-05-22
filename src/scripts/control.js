@@ -1,17 +1,28 @@
-define('scripts/control', ['kit','scrips/draw', 'scripts/Node'], function(kit, Draw, Node){
+define('scripts/control', ['kit','scripts/draw', 'scripts/Node', 'scripts/toolBar', 'scripts/Node2Dom', 'scripts/tip'], function(kit, Draw, Node, toolBar, Node2Dom, tip){
 	class control{
 		constructor(op){
+			this.version = 'v0.0.1';
 			this.dom = op.dom;
 			this.op = op || {};
 			let self = this;
 			self.eventMap = {};
+			self.nodeList = {}; // 用于统计和指定节点名称
+			self.selectable = [];
+			self.type = op.chartType;
 			self.init();
 			self._toolBarInit();
+			self.setData(op.data);
+			self.initTip();
+			self.draw();
 		}
 
 		_toolBarInit(){
-			
+			this.toolBar = new toolBar();
+			let meshList = this.toolBar.generateMeshList(this.document);
+			let meshListContainer = document.querySelector('#timeline');
+			kit.addNode(meshListContainer, meshList);
 		}
+
 
 		init(){
 			let self = this;
@@ -34,8 +45,29 @@ define('scripts/control', ['kit','scrips/draw', 'scripts/Node'], function(kit, D
 		}
 
 		setSize(w, h){
+
 			this.webgl.setSize(w, h);
 		}
+
+		setData(data){
+			data.type = this.type;
+			data.chart = this;
+			let fn = require('scripts/draw/series');
+			fn && fn.call(this, data);
+		}
+
+		initTip(){
+			this.tipControl = new tip();
+		}
+
+		add(node){
+			this.document.append(node);
+			let meshList = this.toolBar.generateMeshList(this.document);
+			let meshListContainer = document.querySelector('#timeline');
+			meshListContainer.innerHTML = '';
+			kit.addNode(meshListContainer, meshList);
+		}
+
 
 		eventInit(){
 			let self = this;
@@ -74,6 +106,17 @@ define('scripts/control', ['kit','scrips/draw', 'scripts/Node'], function(kit, D
 			let self = this;
 			let target = null;
 
+			self.on('click', (e) => {
+				if(e.originList.length > 0){
+					let target = e.originList[0];
+					let virtualDom = new Node2Dom(target);
+					let realDom = this.toolBar.parseData(virtualDom.wrap);
+					let container = document.querySelector('#operate');
+					container.innerHTML = '';
+					container.append(realDom);
+				}
+			})
+
 			self.on('mousemove', (e) => {
 				let isNeedRedraw = false;
 				let lastNode = self.eventLastNode = self.eventLastNode || {};
@@ -81,7 +124,7 @@ define('scripts/control', ['kit','scrips/draw', 'scripts/Node'], function(kit, D
 
 				if(lastHoverNode){
 					if(e.target != lastHoverNode){
-						lastHoverNode.style.mat.opacity = 0.5;
+						lastHoverNode.style.material.opacity = 0.5;
 						lastHoverNode.updateStyle();
 						lastNode['hover'] = null;
 						isNeedRedraw = true;
@@ -93,14 +136,28 @@ define('scripts/control', ['kit','scrips/draw', 'scripts/Node'], function(kit, D
 
 					if((lastHoverNode !== target && typeof target.hover === 'object') || e.data){
 						// self.highlightNode(target);
+						self.tipControl.showTip(target.datum,[e.pageX, e.pageY]);
 						lastNode['hover'] = target;
 						isNeedRedraw = true;
 					}
+				} else {
+					self.tipControl.hideTip();
 				}
-				isNeedRedraw && self.draw();
+				// isNeedRedraw && self.draw();
 			})
 		}
 		
+		translate(p){
+			let rs = this;
+
+			if(p){
+				this.webgl.translate(p);
+			} else {
+				rs = this.webgl.translate();				
+			}
+
+			return rs;
+		}
 
 		on(e, n, fn){
 
@@ -115,16 +172,16 @@ define('scripts/control', ['kit','scrips/draw', 'scripts/Node'], function(kit, D
 				n = null;
 			}
 
-			if(/^!/.test(type)){
+			if(/^!/.test(e)){
 				isPrivate = true;
-				type = type.substr(1);
+				e = e.substr(1);
 			}
 
 			if(typeof fn === 'function'){
 				fn.isPrivate = isPrivate;
 			}
 
-			list = self.eventMap[type] = this.eventMap[type] || [];
+			list = self.eventMap[e] = this.eventMap[e] || [];
 
 			if(list){
 				kit.each(list, (tFn) => {
@@ -166,7 +223,7 @@ define('scripts/control', ['kit','scrips/draw', 'scripts/Node'], function(kit, D
 					, type: type
 					, origin: event 
 					, offset: {
-						control: this.translate()
+						control: self.translate()
 						, dom: [domRect.left, domRect.top]
 					}
 				}
@@ -174,7 +231,7 @@ define('scripts/control', ['kit','scrips/draw', 'scripts/Node'], function(kit, D
 				let e = new Event(op);
 				let lastNode = self.eventLastNode = self.eventLastNode || {};
 				let nodeList = [];
-				e.originList = this.draw.getTarget([e.clientX, e.clientY]);
+				e.originList = this.webgl.getTarget([e.clientX, e.clientY], self.selectable);
 
 				kit.each(e.originList, (node, i) => {
 					node.datum && nodeList.push(node);
@@ -214,6 +271,10 @@ define('scripts/control', ['kit','scrips/draw', 'scripts/Node'], function(kit, D
 			})
 			return this;
 		}
+
+		draw(){
+			this.webgl.draw(this.webgl)();
+		}
 	}
 
 	class Event{
@@ -223,8 +284,8 @@ define('scripts/control', ['kit','scrips/draw', 'scripts/Node'], function(kit, D
 			this.pageY = this.origin.y
 			this.clientX = this.pageX - this.offset.dom[0]
 			this.clientY = this.pageY - this.offset.dom[1]
-			this.x = this.clientX - this.offset.chart[0]
-			this.y = this.clientY - this.offset.chart[1]
+			this.x = this.clientX - this.offset.control[0]
+			this.y = this.clientY - this.offset.control[1]
 			this.target = null
 			return this;
 		}
@@ -236,6 +297,7 @@ define('scripts/control', ['kit','scrips/draw', 'scripts/Node'], function(kit, D
 			// this.chart.hightlight(this.target);
 		}
 	}
+
 
 	return control;
 })

@@ -183,8 +183,71 @@ define('scripts/config', [], function(){
 		}
 	}
 
+	let styleConfig = {
+		name: true
+		, style: true
+		, material: true
+		, wireframe: true
+		, color: true
+		, rotation: true
+		, scale: true
+		, position: true
+		, side: true
+		, transparent: true
+		, opacity: true
+		, x: true
+		, y: true
+		, z: true
+	}
+
+	let styleControl = {
+		name: function(self){
+
+			return function(name){
+				self.name = name;
+			}
+		}
+
+		, rotation: function(self){
+
+			return function(vector){
+				self.rotation.set(vector.x, vector.y, vector.z, 'XYZ');
+			}
+		}
+
+		, scale: function(self){
+
+			return function(vector){
+				self.scale.set(vector.x, vector.y, vector.z);
+			}
+		}
+
+		, position: function(self){
+
+			return function(vector){
+				self.position.set(vector.x, vector.y, vector.z);
+			}
+		}
+		, material: function(self){
+
+			return function(mat){
+				Object.keys(mat).forEach(function(item){
+					if(item === 'color'){
+						self.material && (self.material[item] = new THREE.Color(mat[item]));
+						return;
+					}
+					self.material && (self.material[item] = mat[item]);
+				})
+			}
+		}
+	}
+
 	let Config = {
 		basic: config
 		, axisConfig: axisConfig
+		, styleConfig: styleConfig
+		, styleControl: styleControl
 	}
+
+	return Config;
 });

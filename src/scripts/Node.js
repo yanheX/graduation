@@ -1,9 +1,10 @@
-define('scripts/Node', ['kit'], function(kit){
+define('scripts/Node', ['kit', 'scripts/config'], function(kit, Config){
 
 	class Node{
 		constructor(op){
 			this.opt = op || {};
 			let self = this;
+			this.name = kit.getRandomStr();
 			this.childs = [];
 			this.style = {
 				visible: true
@@ -11,7 +12,8 @@ define('scripts/Node', ['kit'], function(kit){
 				, receiveShader: false
 				, position: {x:0, y:0, z:0}
 				, scale: {x:1, y:1, z:1}
-				, rotation: {x:1, y:1, z:1}
+				, rotation: {x:0, y:0, z:0}
+				, geometry: [1, 1, 1]
 				, material: {
 					color: 0xffffff
 					, opacity: 1
@@ -32,10 +34,13 @@ define('scripts/Node', ['kit'], function(kit){
 				this.mat = null;
 				this.option = kit.generateShape(this.type);
 			} else {
-				this.geo = kit.generateShape(this.type, this.geo);
-				this.mat = kit.generateMaterial('standard', this.style.material);
+				this.geo = kit.generateShape(this.type[0], this.style.geometry);
+				this.mat = kit.generateMaterial(this.type[1], this.style.material);
 				this.option = new THREE.Mesh(this.geo, this.mat);
 			}
+			this.option.name = this.name;
+			this.option.refer = this;
+
 			this.updateStyle(1);
 		}
 
@@ -127,7 +132,12 @@ define('scripts/Node', ['kit'], function(kit){
 
 		updateStyle(flag){
 			let self = this;
-			kit.optionSet(self.option, self.style, flag);
+			let updateFun = Config.styleControl;
+			Object.keys(updateFun).forEach((item, index) => {
+				updateFun[item](self.option)(self.style[item]);
+			});
+			// kit.optionSet(self.option, self.style, flag);
+
 		}
 
 		each(fn, justChild){
@@ -145,5 +155,7 @@ define('scripts/Node', ['kit'], function(kit){
 
 
 	}
+
+	return Node;
 
 });

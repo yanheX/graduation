@@ -18,10 +18,7 @@ let config = {
 let count = 1;
 
 let server = http.createServer((req, res) => {
-	console.log(count++);
 	let pathName = url.parse(req.url).pathname || 'index.html';
-	console.log(pathName);
-
 	switch(pathName){
 		case ''||'/':
 			parseFiles('/index.html', res);
@@ -34,11 +31,16 @@ let server = http.createServer((req, res) => {
 })
 
 let parseFiles = (url,res) => {
+
 	let fileName = url.slice(1);
 	let type = getType(fileName.slice(fileName.lastIndexOf('.') + 1));
+	let router = './src/';
 
-	fs.readFile('./src/' + fileName, (err, data) => {
-		console.log('./src/' + fileName,'type:' ,type, ', nowTime: ', new Date());
+	if(url.substr(1,4) === 'dist'){
+		router = './'
+	}
+
+	fs.readFile(router + fileName, (err, data) => {
 		if(err){
 			res.writeHead(404, { 'Content-Type':'text/plain; charset="UTF-8"' });
 			// res.write(err.message);
@@ -83,18 +85,12 @@ function concatJS(){
 			fs.mkdir('./dist');
 		}
 	})
-	let middle = ['src/libs/three.min.js', 'src/libs/OribitControls.js', 'src/libs/OBJLoader.js', 'src/libs/Detector.js', 'src/libs/stats.min.js', 'src/libs/dat.GUI.min.js'];
-	let before = ['src/app/pack-before.js', 'src/app/loader.js', 'src/app/kit.js'];
-	let after = ['src/scripts/*.js', 'src/app/pack-after.js'];
+	let before = ['src/libs/three.min.js', 'src/libs/OrbitControls.js', 'src/libs/OBJLoader.js', 'src/libs/Detector.js', 'src/libs/stats.min.js', 'src/libs/dat.GUI.min.js'];
+	let middle = ['src/app/pack-before.js', 'src/app/loader.js', 'src/app/kit.js'];
+	let after = ['src/scripts/*.js','src/scripts/draw/*.js', 'src/app/pack-after.js'];
 	gulp.src(before.concat(middle, after))
-		.pipe(concat('libs.js'))
+		.pipe(concat('controls.js'))
 		.pipe(gulp.dest('dist'));
-		// .pipe(gulp.dest('dist'));
-	// console.log(a);
-
-	// gulp.src('src/libs/*.js')
-	// 	.pipe(concat('libs.js'))
-	// 	.pipe(gulp.dest('dist'));
 }
 
 function deleteAllFiles(path){
@@ -168,7 +164,7 @@ function deleteDiectory(path, level){
 
 
 
-gulp.task('default', function(){
+gulp.task('default',['pack', 'watch'], function(){
 	server.listen(config.port);
 });
 
@@ -197,3 +193,8 @@ gulp.task('rmdirs', ['rmfiles'], function() {
 
 })
 
+gulp.task('watch', function(){
+	gulp.watch('src/scripts/*.js', ['pack']);
+	gulp.watch('src/scripts/draw/*.js', ['pack']);
+	gulp.watch('src/app/*.js', ['pack']);
+})

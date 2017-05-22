@@ -60,6 +60,36 @@ define('scripts/toolBar', ['kit'], function(kit){
 				tar.childs && kit.addNode(node, self.parseData(tar.childs));
 				kit.addNode(wrap, node);
 			});
+			this.attributeWrap = wrap;
+
+			return wrap;
+		}
+
+		generateMeshList(opt){
+			let self = this;
+			let wrap;
+			wrap = kit.createNode('dl');
+
+			kit.addClass(wrap, []);
+			let title = kit.createNode('dt');
+			title.innerHTML = opt.name + '\t\t' + (kit.typeOf(opt.type) === 'array'? opt.type[0] : opt.type);
+
+			kit.addNode(wrap, title);
+			if(opt.childs.length > 0){
+				let childContainer = kit.createNode('dd');
+				let childNode = kit.createNode('dl');
+				kit.addNode(childContainer, childNode);
+				kit.addNode(wrap, childContainer);
+
+				opt.childs.forEach(function(item, index){
+
+					let node = self.generateMeshList(item);
+					kit.addNode(childNode, node);
+				})
+			}
+
+			self.meshList = wrap;
+
 
 			return wrap;
 		}

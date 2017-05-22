@@ -126,6 +126,7 @@ define('kit', function(){
 	}
 
 	kit.addClass = (node,CN) => {
+		if(!CN && kit.typeOf(CN) !== 'array' && CN.length === 0) return;
 		node.classList.add(...CN);
 	}
 
@@ -165,10 +166,6 @@ define('kit', function(){
 			return Number('0x' + data.substr(1,6));
 
 		}
-
-		// if(data.substr())
-
-
 
 		return data;
 	}
